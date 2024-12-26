@@ -13,6 +13,11 @@ mod tests {
 	};
 
 	#[test]
+	fn util() {
+		assert!(is_eq(0.1 + 0.2, 0.3))
+	}
+
+	#[test]
 	fn point() {
 		let p = Point::new(3.0, 4.0);
 

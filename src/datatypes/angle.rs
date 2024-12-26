@@ -45,34 +45,18 @@ impl Sub for Angle {
 	}
 }
 
-impl Mul<f64> for Angle {
+impl<T: Into<f64>> Mul<T> for Angle {
 	type Output = Angle;
 
-	fn mul(self, rhs: f64) -> Self::Output {
-		Angle::new(self.value * rhs)
+	fn mul(self, rhs: T) -> Self::Output {
+		Angle::new(self.value * rhs.into())
 	}
 }
 
-impl Mul<i64> for Angle {
+impl<T: Into<f64>> Div<T> for Angle {
 	type Output = Angle;
 
-	fn mul(self, rhs: i64) -> Self::Output {
-		Angle::new(self.value * rhs as f64)
-	}
-}
-
-impl Div<f64> for Angle {
-	type Output = Angle;
-
-	fn div(self, rhs: f64) -> Self::Output {
-		Angle::new(self.value / rhs)
-	}
-}
-
-impl Div<i64> for Angle {
-	type Output = Angle;
-
-	fn div(self, rhs: i64) -> Self::Output {
-		Angle::new(self.value / rhs as f64)
+	fn div(self, rhs: T) -> Self::Output {
+		Angle::new(self.value / rhs.into())
 	}
 }

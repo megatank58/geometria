@@ -54,10 +54,12 @@ mod tests {
 	fn rotation() {
 		let a = Point::new(0.0, 0.0);
 		let b = Point::new(3.0, 4.0);
+		let c = Point::new(-4.0, 3.0);
 
-		let line = Line::from_points(a, b);
+		let l1 = Line::from_points(a, b);
+		let l2 = Line::from_points(a, c);
 
-		b.rotate(PI / 2);
-		line.rotate(PI / 2, ORIGIN);
+		assert_eq!(b.rotate(PI / 2), c);
+		assert_eq!(l1.rotate(PI / 2, ORIGIN), l2);
 	}
 }

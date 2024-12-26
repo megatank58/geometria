@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use crate::datatypes::angle::Angle;
+use crate::{datatypes::angle::Angle, util::is_eq};
 
 use super::point::Point;
 #[derive(Debug, Copy, Clone)]
@@ -43,6 +43,12 @@ impl Line {
 			+ point.y * (angle.sin() - self.angle().sin());
 
 		Line::new(angle.tan(), new_p / angle.sin())
+	}
+}
+
+impl PartialEq for Line {
+	fn eq(&self, other: &Self) -> bool {
+		is_eq(self.slope, other.slope) && is_eq(self.y_intercept, other.y_intercept)
 	}
 }
 

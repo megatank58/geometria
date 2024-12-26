@@ -3,7 +3,7 @@ use std::{
 	ops::{Add, Sub},
 };
 
-use crate::{datatypes::radian::Radian, util::is_eq};
+use crate::{datatypes::angle::Angle, util::is_eq};
 
 #[derive(Debug, Copy, Clone)]
 pub struct Point {
@@ -20,11 +20,11 @@ impl Point {
 		(self.x.powf(2.0) + self.y.powf(2.0)).powf(0.5)
 	}
 
-	pub fn angle(&self) -> Radian {
-		Radian::new((self.y / self.x).atan())
+	pub fn angle(&self) -> Angle {
+		Angle::new((self.y / self.x).atan())
 	}
 
-	pub fn rotate(&self, angle: Radian) -> Self {
+	pub fn rotate(&self, angle: Angle) -> Self {
 		let abs = self.abs();
 
 		let angle = self.angle() + angle;

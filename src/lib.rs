@@ -7,7 +7,7 @@ mod util;
 mod tests {
 	use crate::{
 		consts::{ORIGIN, PI},
-		datatypes::radian::Radian,
+		datatypes::angle::Angle,
 		elements::{line::Line, plane::Plane, point::Point},
 		util::is_eq,
 	};
@@ -21,7 +21,7 @@ mod tests {
 	fn point() {
 		let p = Point::new(3.0, 4.0);
 
-		assert_eq!(p.angle(), Radian::new(0.9272952180016122));
+		assert_eq!(p.angle(), Angle::new(0.9272952180016122));
 	}
 
 	#[test]

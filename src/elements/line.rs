@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use crate::datatypes::radian::Radian;
+use crate::datatypes::angle::Angle;
 
 use super::point::Point;
 #[derive(Debug, Copy, Clone)]
@@ -22,18 +22,18 @@ impl Line {
 		Self { slope, y_intercept }
 	}
 
-	pub fn from_angle(r: f64, angle: Radian, p: Point) -> Self {
+	pub fn from_angle(r: f64, angle: Angle, p: Point) -> Self {
 		let x = r * angle.value.cos();
 		let y = r * angle.value.sin();
 
 		Line::from_points(p, Point::new(x, y))
 	}
 
-	pub fn angle(&self) -> Radian {
-		Radian::new(self.slope.atan())
+	pub fn angle(&self) -> Angle {
+		Angle::new(self.slope.atan())
 	}
 
-	pub fn rotate(&self, angle: Radian, point: Point) -> Self {
+	pub fn rotate(&self, angle: Angle, point: Point) -> Self {
 		let p = self.y_intercept / (1.0 + self.slope.powf(2.0)).sqrt();
 
 		let angle = self.angle() + angle;

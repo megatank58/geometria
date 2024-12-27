@@ -8,7 +8,7 @@ mod tests {
 	use crate::{
 		consts::{ORIGIN, PI},
 		datatypes::angle::Angle,
-		elements::{line::Line, plane::Plane, point::Point},
+		elements::{circle::Circle, line::Line, plane::Plane, point::Point},
 		util::is_eq,
 	};
 
@@ -53,10 +53,7 @@ mod tests {
 		let l1 = Line::new(1.0, 0.0);
 		let l2 = Line::new(-1.0, 0.0);
 
-		assert_eq!(
-			Plane::intersect(l1, l2).angles()[0],
-			PI/2
-		);
+		assert_eq!(Plane::intersect(l1, l2).angles()[0], PI / 2);
 	}
 
 	#[test]
@@ -93,5 +90,40 @@ mod tests {
 		let l2 = Line::new(1.0, 2.0);
 
 		assert_eq!(Plane::image(l1, l2).unwrap().to_line(), Line::new(1.0, 4.0));
+	}
+
+	#[test]
+	fn circle() {
+		let circle = Circle::new(Point::new(0.0, 0.0), 20.0);
+
+		let mut line = Line::from_point_slope(Point::new(16.0, 12.0), 0.0);
+		let mut drawn_from = Point::new(-16.0, 12.0);
+		let end_point = Point::new(-16.0, 12.0);
+
+		let mut counter = 0;
+
+		loop {
+			let intersection = Plane::intersect(circle, line);
+
+			drawn_from = *intersection
+				.points()
+				.iter()
+				.filter(|f| **f != drawn_from)
+				.next()
+				.unwrap();
+
+			line = Line::from_point_slope(
+				drawn_from,
+				(line.angle() - (PI - intersection.angles()[0] * 2)).tan(),
+			);
+
+			if end_point == drawn_from {
+				break;
+			}
+
+			counter += 1;
+		}
+
+		dbg!(counter);
 	}
 }

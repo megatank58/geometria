@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use crate::{datatypes::angle::Angle, util::is_eq};
+use crate::{consts::PI, datatypes::angle::Angle, util::is_eq};
 
 use super::{line::Line, point::Point, Element};
 
@@ -40,6 +40,39 @@ impl Plane {
 					Intersection::None
 				}
 			}
+			(Element::Point(p), Element::Circle(circle))
+			| (Element::Circle(circle), Element::Point(p)) => {
+				if is_eq(Plane::distance(circle.center, p), circle.radius) {
+					Intersection::Points(vec![(p, Angle::new(0.0))])
+				} else {
+					Intersection::None
+				}
+			}
+			(Element::Line(line), Element::Circle(circle))
+			| (Element::Circle(circle), Element::Line(line)) => {
+				if is_eq(Plane::distance(circle.center, line), circle.radius) {
+					let p = Plane::foot_of_perpendicular(circle.center, line).unwrap();
+
+					Intersection::Points(vec![(p, PI / 2)])
+				} else if Plane::distance(circle.center, line) < circle.radius {
+					let p = Plane::foot_of_perpendicular(circle.center, line).unwrap();
+
+					let perpendicular_distance = Plane::distance(p, circle.center);
+
+					let half_chord_length =
+						(circle.radius.powf(2.0) - perpendicular_distance.powf(2.0)).sqrt();
+
+					let p1 = p.shift(half_chord_length, line.angle());
+					let p2 = p.shift(-half_chord_length, line.angle());
+
+					let angle = Angle::new((perpendicular_distance / half_chord_length).atan());
+
+					Intersection::Points(vec![(p1, angle), (p2, angle)])
+				} else {
+					Intersection::None
+				}
+			}
+			(Element::Circle(..), Element::Circle(..)) => todo!(),
 		}
 	}
 
@@ -59,6 +92,7 @@ impl Plane {
 					0.0
 				}
 			}
+			_ => unimplemented!(),
 		}
 	}
 
@@ -71,10 +105,11 @@ impl Plane {
 			(Element::Point(p), Element::Line(line)) => {
 				let c = - (line.slope * p.x - p.y + line.y_intercept)/(line.slope.powf(2.0) + 1.0);
 
-				Ok(Point::new(p.x + line.slope * c, p.y - line.slope * c))
+				Ok(Point::new(p.x + line.slope * c, p.y - c))
 			},
 			(Element::Line(..), Element::Point(..)) => Err("attempt to drop perpendicular from line to point, did you mean to drop from point to line?".into()),
-			(Element::Line(..), Element::Line(..)) => Err("attempt to drop perpendicular from line to line".into())
+			(Element::Line(..), Element::Line(..)) => Err("attempt to drop perpendicular from line to line".into()),
+			_ => unimplemented!()
 		}
 	}
 
@@ -103,6 +138,7 @@ impl Plane {
 					Ok(Line::new(l1.slope, l2.y_intercept * 2.0 - l1.y_intercept).into())
 				}
 			}
+			_ => unimplemented!()
 		}
 	}
 }

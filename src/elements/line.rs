@@ -22,6 +22,12 @@ impl Line {
 		Self { slope, y_intercept }
 	}
 
+	pub fn from_point_slope(p: Point, slope: f64) -> Self {
+		let y_intercept = -slope * p.x + p.y;
+
+		Self { slope, y_intercept }
+	}
+
 	pub fn from_angle(r: f64, angle: Angle, p: Point) -> Self {
 		let x = r * angle.value.cos();
 		let y = r * angle.value.sin();

@@ -1,4 +1,4 @@
-use std::ops::{Add, Div, Mul, Sub};
+use std::ops::{Add, Div, Mul, Neg, Sub};
 
 use crate::consts::PI;
 
@@ -58,5 +58,13 @@ impl<T: Into<f64>> Div<T> for Angle {
 
 	fn div(self, rhs: T) -> Self::Output {
 		Angle::new(self.value / rhs.into())
+	}
+}
+
+impl Neg for Angle {
+	type Output = Angle;
+
+	fn neg(self) -> Self::Output {
+		Angle::new(-self.value)
 	}
 }

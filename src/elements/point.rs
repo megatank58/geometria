@@ -31,6 +31,10 @@ impl Point {
 
 		Point::new(abs * angle.cos(), abs * angle.sin())
 	}
+
+	pub fn shift(&self, distance: f64, angle: Angle) -> Self {
+		Point::new(self.x + distance * angle.cos(), self.y + distance * angle.sin())
+	}
 }
 
 impl Add for Point {
